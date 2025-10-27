@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>节律健康指数·六维评分表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fecaca 100%);
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        .gradient-title {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+        }
+
+        .gradient-eat {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+
+        .gradient-drink {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+
+        .gradient-poop {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        }
+
+        .gradient-pee {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+        }
+
+        .gradient-sleep {
+            background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+        }
+
+        .gradient-mood {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .total-score {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .score-value {
+            font-weight: 700;
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .radio-label:active {
+            transform: scale(0.98);
+        }
+
+        .radio-label.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .radio {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #f59e0b;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 13px;
+            color: #1e293b;
+        }
+
+        .option-score {
+            font-weight: 700;
+            font-size: 14px;
+            color: #f59e0b;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .slider-group {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .slider-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 40px;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .slider-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f59e0b;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-value {
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            color: #f59e0b;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 6px;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #f59e0b;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .info-box {
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #78350f;
+            margin-bottom: 12px;
+        }
+
+        .info-box strong {
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 12px 0;
+        }
+
+        .date-input {
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-excellent {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-good {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-fair {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-poor {
+            background: #fecaca;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题 -->
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="title">节律健康指数<br>六维评分表</h1>
+                <p class="subtitle">100分制 v2.0 | 吃喝拉撒睡情</p>
+                <p class="subtitle">Lynn舌象·节律健康发起人出品</p>
+            </div>
+        </div>
+
+        <!-- 工具切换提示 -->
+        <div class="card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 2px solid #3b82f6;">
+            <div class="card-body" style="text-align: center; padding: 12px;">
+                <p style="font-size: 12px; color: #1e40af; margin-bottom: 8px; font-weight: 600;">
+                    💡 配套工具：早晨已经填写打卡表了吗？
+                </p>
+                <a href="https://lynnzhang-cpu.github.io/Tongue-Rhythm--checkin-form/?v=2025-10-27" 
+                   style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: 500;">
+                    📸 去填晨间打卡表 →
+                </a>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="exportData()">📥 导出</button>
+            <button class="btn btn-outline" onclick="importData()">📤 导入</button>
+            <button class="btn btn-ghost" onclick="resetData()">🔄 重置</button>
+        </div>
+
+        <!-- 总分显示 -->
+        <div class="score-display">
+            <div class="total-score" id="totalScore">0</div>
+            <div style="font-size: 12px; color: #78350f; margin-bottom: 12px;">
+                <span id="scoreBadge"></span>
+            </div>
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <span>🍚 吃</span>
+                    <span class="score-value" id="eatScore">0</span>
+                    <span>/15</span>
+                </div>
+                <div class="score-item">
+                    <span>💧 喝</span>
+                    <span class="score-value" id="drinkScore">0</span>
+                    <span>/10</span>
+                </div>
+                <div class="score-item">
+                    <span>💩 拉</span>
+                    <span class="score-value" id="poopScore">0</span>
+                    <span>/15</span>
+                </div>
+                <div class="score-item">
+                    <span>🚽 撒</span>
+                    <span class="score-value" id="peeScore">0</span>
+                    <span>/10</span>
+                </div>
+                <div class="score-item">
+                    <span>😴 睡</span>
+                    <span class="score-value" id="sleepScore">0</span>
+                    <span>/30</span>
+                </div>
+                <div class="score-item">
+                    <span>💗 情</span>
+                    <span class="score-value" id="moodScore">0</span>
+                    <span>/20</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日期 -->
+        <div class="card">
+            <div class="card-body">
+                <input type="date" class="input date-input" id="recordDate" onchange="saveData()">
+            </div>
+        </div>
+
+        <!-- 1. 吃（15分） -->
+        <div class="card">
+            <div class="card-header gradient-eat">🍚 吃（15分）</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="section-title">食欲</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('eat_appetite', 5)">
+                            <input type="radio" name="eat_appetite" value="5" class="radio">
+                            <span class="option-text">正常或略旺</span>
+                            <span class="option-score">5分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('eat_appetite', 2)">
+                            <input type="radio" name="eat_appetite" value="2" class="radio">
+                            <span class="option-text">偏低</span>
+                            <span class="option-score">2分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('eat_appetite', 0)">
+                            <input type="radio" name="eat_appetite" value="0" class="radio">
+                            <span class="option-text">无食欲</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">饮食温度偏好</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('eat_temp', 5)">
+                            <input type="radio" name="eat_temp" value="5" class="radio">
+                            <span class="option-text">以温热为主或少冰冷</span>
+                            <span class="option-score">5分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('eat_temp', 3)">
+                            <input type="radio" name="eat_temp" value="3" class="radio">
+                            <span class="option-text">冷热参半</span>
+                            <span class="option-score">3分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('eat_temp', 0)">
+                            <input type="radio" name="eat_temp" value="0" class="radio">
+                            <span class="option-text">偏好冰冷</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">餐后舒适度（腹胀/嗳气/反酸）</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('eat_comfort', 5)">
+                            <input type="radio" name="eat_comfort" value="5" class="radio">
+                            <span class="option-text">无不适</span>
+                            <span class="option-score">5分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('eat_comfort', 3)">
+                            <input type="radio" name="eat_comfort" value="3" class="radio">
+                            <span class="option-text">偶发轻度</span>
+                            <span class="option-score">3分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('eat_comfort', 0)">
+                            <input type="radio" name="eat_comfort" value="0" class="radio">
+                            <span class="option-text">频发或明显</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="checkbox" id="eat_bonus" onchange="calculateScore()">
+                        <span style="flex: 1; font-size: 12px;">加分：晚餐七分饱且睡前3小时不进食 (+2分)</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 喝（10分） -->
+        <div class="card">
+            <div class="card-header gradient-drink">💧 喝（10分）</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="section-title">当日饮水量</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('drink_amount', 5)">
+                            <input type="radio" name="drink_amount" value="5" class="radio">
+                            <span class="option-text">≥1000ml</span>
+                            <span class="option-score">5分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('drink_amount', 3)">
+                            <input type="radio" name="drink_amount" value="3" class="radio">
+                            <span class="option-text">500-1000ml</span>
+                            <span class="option-score">3分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('drink_amount', 0)">
+                            <input type="radio" name="drink_amount" value="0" class="radio">
+                            <span class="option-text">&lt;500ml</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">饮品选择</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('drink_type', 5)">
+                            <input type="radio" name="drink_type" value="5" class="radio">
+                            <span class="option-text">温水/常温为主</span>
+                            <span class="option-score">5分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('drink_type', 2)">
+                            <input type="radio" name="drink_type" value="2" class="radio">
+                            <span class="option-text">冷热交替或含糖饮多</span>
+                            <span class="option-score">2分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('drink_type', 0)">
+                            <input type="radio" name="drink_type" value="0" class="radio">
+                            <span class="option-text">冰饮为主</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 拉（15分） -->
+        <div class="card">
+            <div class="card-header gradient-poop">💩 拉·大便（15分）</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="section-title">频次</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('poop_freq', 6)">
+                            <input type="radio" name="poop_freq" value="6" class="radio">
+                            <span class="option-text">每日或隔日一次</span>
+                            <span class="option-score">6分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('poop_freq', 2)">
+                            <input type="radio" name="poop_freq" value="2" class="radio">
+                            <span class="option-text">2日以上未解</span>
+                            <span class="option-score">0-2分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">性状</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('poop_shape', 6)">
+                            <input type="radio" name="poop_shape" value="6" class="radio">
+                            <span class="option-text">成形、色黄褐</span>
+                            <span class="option-score">6分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('poop_shape', 2)">
+                            <input type="radio" name="poop_shape" value="2" class="radio">
+                            <span class="option-text">稀溏/不成形</span>
+                            <span class="option-score">2分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('poop_shape', 2)">
+                            <input type="radio" name="poop_shape" value="2" class="radio">
+                            <span class="option-text">过干硬</span>
+                            <span class="option-score">2分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">便后感</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('poop_feel', 3)">
+                            <input type="radio" name="poop_feel" value="3" class="radio">
+                            <span class="option-text">轻松、无粘腻</span>
+                            <span class="option-score">3分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('poop_feel', 1)">
+                            <input type="radio" name="poop_feel" value="1" class="radio">
+                            <span class="option-text">偶有不尽感</span>
+                            <span class="option-score">1分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('poop_feel', 0)">
+                            <input type="radio" name="poop_feel" value="0" class="radio">
+                            <span class="option-text">明显不尽/便后纸上粘腻</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 撒（10分） -->
+        <div class="card">
+            <div class="card-header gradient-pee">🚽 撒·小便（10分）</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="section-title">夜尿</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('pee_night', 4)">
+                            <input type="radio" name="pee_night" value="4" class="radio">
+                            <span class="option-text">0-1次</span>
+                            <span class="option-score">4分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('pee_night', 1)">
+                            <input type="radio" name="pee_night" value="1" class="radio">
+                            <span class="option-text">≥2次</span>
+                            <span class="option-score">1分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">颜色/清澈度</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('pee_color', 4)">
+                            <input type="radio" name="pee_color" value="4" class="radio">
+                            <span class="option-text">淡黄清澈</span>
+                            <span class="option-score">4分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('pee_color', 1)">
+                            <input type="radio" name="pee_color" value="1" class="radio">
+                            <span class="option-text">偏黄/混浊</span>
+                            <span class="option-score">1分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">刺激感/异味</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('pee_feel', 2)">
+                            <input type="radio" name="pee_feel" value="2" class="radio">
+                            <span class="option-text">无</span>
+                            <span class="option-score">2分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('pee_feel', 0)">
+                            <input type="radio" name="pee_feel" value="0" class="radio">
+                            <span class="option-text">有</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 睡（30分） -->
+        <div class="card">
+            <div class="card-header gradient-sleep">😴 睡（30分）</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="section-title">入睡时点</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('sleep_time', 10)">
+                            <input type="radio" name="sleep_time" value="10" class="radio">
+                            <span class="option-text">≤23:00</span>
+                            <span class="option-score">10分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_time', 6)">
+                            <input type="radio" name="sleep_time" value="6" class="radio">
+                            <span class="option-text">23:01-23:30</span>
+                            <span class="option-score">6分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_time', 4)">
+                            <input type="radio" name="sleep_time" value="4" class="radio">
+                            <span class="option-text">23:31-24:00</span>
+                            <span class="option-score">4分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_time', 0)">
+                            <input type="radio" name="sleep_time" value="0" class="radio">
+                            <span class="option-text">&gt;24:00</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">总时长</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('sleep_duration', 6)">
+                            <input type="radio" name="sleep_duration" value="6" class="radio">
+                            <span class="option-text">≥7小时</span>
+                            <span class="option-score">6分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_duration', 3)">
+                            <input type="radio" name="sleep_duration" value="3" class="radio">
+                            <span class="option-text">6-6.9小时</span>
+                            <span class="option-score">3分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_duration', 0)">
+                            <input type="radio" name="sleep_duration" value="0" class="radio">
+                            <span class="option-text">&lt;6小时</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">入睡难易/中途觉</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('sleep_quality', 6)">
+                            <input type="radio" name="sleep_quality" value="6" class="radio">
+                            <span class="option-text">易入睡且少中途觉</span>
+                            <span class="option-score">6分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_quality', 3)">
+                            <input type="radio" name="sleep_quality" value="3" class="radio">
+                            <span class="option-text">入睡&gt;30min或多梦易醒</span>
+                            <span class="option-score">3分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_quality', 0)">
+                            <input type="radio" name="sleep_quality" value="0" class="radio">
+                            <span class="option-text">频繁觉醒</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">醒后感</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('sleep_wake', 4)">
+                            <input type="radio" name="sleep_wake" value="4" class="radio">
+                            <span class="option-text">醒后精神</span>
+                            <span class="option-score">4分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_wake', 2)">
+                            <input type="radio" name="sleep_wake" value="2" class="radio">
+                            <span class="option-text">一般</span>
+                            <span class="option-score">2分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_wake', 0)">
+                            <input type="radio" name="sleep_wake" value="0" class="radio">
+                            <span class="option-text">疲惫</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="section-title">午间修复</div>
+                    <div class="radio-group">
+                        <label class="radio-label" onclick="selectRadio('sleep_noon', 4)">
+                            <input type="radio" name="sleep_noon" value="4" class="radio">
+                            <span class="option-text">闭目10-20min或散步10min</span>
+                            <span class="option-score">4分</span>
+                        </label>
+                        <label class="radio-label" onclick="selectRadio('sleep_noon', 0)">
+                            <input type="radio" name="sleep_noon" value="0" class="radio">
+                            <span class="option-text">未完成</span>
+                            <span class="option-score">0分</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 情（20分） -->
+        <div class="card">
+            <div class="card-header gradient-mood">💗 情·情绪体感（20分）</div>
+            <div class="card-body">
+                <div class="section-subtitle">过去24小时平均感受</div>
+                <div class="slider-group">
+                    <div class="slider-row">
+                        <span class="slider-label">情绪平稳</span>
+                        <input type="range" class="slider" min="0" max="10" value="5" id="mood_stable" oninput="updateMoodSlider('mood_stable', this.value)" onchange="calculateScore()">
+                        <span class="slider-value" id="mood_stable_val">5</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">精力充沛</span>
+                        <input type="range" class="slider" min="0" max="5" value="2" id="mood_energy" oninput="updateMoodSlider('mood_energy', this.value)" onchange="calculateScore()">
+                        <span class="slider-value" id="mood_energy_val">2</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">消化舒适</span>
+                        <input type="range" class="slider" min="0" max="5" value="2" id="mood_digest" oninput="updateMoodSlider('mood_digest', this.value)" onchange="calculateScore()">
+                        <span class="slider-value" id="mood_digest_val">2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加减分 -->
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);">
+                ⭐ 加/减分（可选，±5）
+            </div>
+            <div class="card-body">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox" id="bonus_morning" onchange="calculateScore()">
+                    <span style="flex: 1; font-size: 12px;">晨光 ≥10分钟 (+2分)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox" id="bonus_night" onchange="calculateScore()">
+                    <span style="flex: 1; font-size: 12px;">夜间收尾（睡前45min放屏+热足/轻拉伸）(+2分)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox" id="penalty_food" onchange="calculateScore()">
+                    <span style="flex: 1; font-size: 12px;">夜宵/重油辛辣/暴饮暴食 (-2分)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox" id="penalty_caffeine" onchange="calculateScore()">
+                    <span style="flex: 1; font-size: 12px;">过量咖啡因/能量饮料（下午后）(-1分)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 当日打卡栏 -->
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
+                📝 当日打卡记录
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="section-title">关键行动 → 体感/舌象变化</div>
+                    <textarea class="textarea" id="note_action" placeholder="例如：今天坚持23:00前入睡，早上舌苔明显变薄..." onchange="saveData()"></textarea>
+                </div>
+                <div class="form-group">
+                    <div class="section-title">明日坚持1件事</div>
+                    <input type="text" class="input" id="note_tomorrow" placeholder="例如：继续晚餐七分饱" onchange="saveData()">
+                </div>
+            </div>
+        </div>
+
+        <!-- 说明 -->
+        <div class="info-box">
+            <p><strong>💡 使用说明：</strong></p>
+            <p>• 本表用于生活方式与健康教育，不构成医疗诊断/处方</p>
+            <p>• 建议与《三天·晨舌节律打卡表》配套使用</p>
+            <p>• 每日填写，观察分数与体感的变化趋势</p>
+            <p>• 数据会自动保存，切换页面后回来数据仍在</p>
+            <p>• 可随时导出数据备份，重置数据会清除自动保存</p>
+        </div>
+
+        <!-- 页脚 -->
+        <footer>
+            <p>版本：v2.0 | Owner：Lynn | 节律文明·入门版</p>
+            <p>配套：AI舌象小程序 / 三天·晨舌节律打卡表</p>
+        </footer>
+    </div>
+
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+    <script>
+        // 初始化日期
+        document.getElementById('recordDate').valueAsDate = new Date();
+
+        // 选择单选按钮
+        function selectRadio(name, value) {
+            const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (radio) {
+                radio.checked = true;
+                
+                // 更新样式
+                document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                    r.closest('.radio-label').classList.remove('selected');
+                });
+                radio.closest('.radio-label').classList.add('selected');
+                
+                calculateScore();
+                saveData();
+            }
+        }
+
+        // 更新情绪滑块
+        function updateMoodSlider(id, value) {
+            document.getElementById(id + '_val').textContent = value;
+        }
+
+        // 计算总分
+        function calculateScore() {
+            let scores = {
+                eat: 0,
+                drink: 0,
+                poop: 0,
+                pee: 0,
+                sleep: 0,
+                mood: 0
+            };
+
+            // 吃（15分）
+            scores.eat += parseInt(document.querySelector('input[name="eat_appetite"]:checked')?.value || 0);
+            scores.eat += parseInt(document.querySelector('input[name="eat_temp"]:checked')?.value || 0);
+            scores.eat += parseInt(document.querySelector('input[name="eat_comfort"]:checked')?.value || 0);
+            if (document.getElementById('eat_bonus').checked) {
+                scores.eat = Math.min(scores.eat + 2, 15);
+            }
+
+            // 喝（10分）
+            scores.drink += parseInt(document.querySelector('input[name="drink_amount"]:checked')?.value || 0);
+            scores.drink += parseInt(document.querySelector('input[name="drink_type"]:checked')?.value || 0);
+
+            // 拉（15分）
+            scores.poop += parseInt(document.querySelector('input[name="poop_freq"]:checked')?.value || 0);
+            scores.poop += parseInt(document.querySelector('input[name="poop_shape"]:checked')?.value || 0);
+            scores.poop += parseInt(document.querySelector('input[name="poop_feel"]:checked')?.value || 0);
+
+            // 撒（10分）
+            scores.pee += parseInt(document.querySelector('input[name="pee_night"]:checked')?.value || 0);
+            scores.pee += parseInt(document.querySelector('input[name="pee_color"]:checked')?.value || 0);
+            scores.pee += parseInt(document.querySelector('input[name="pee_feel"]:checked')?.value || 0);
+
+            // 睡（30分）
+            scores.sleep += parseInt(document.querySelector('input[name="sleep_time"]:checked')?.value || 0);
+            scores.sleep += parseInt(document.querySelector('input[name="sleep_duration"]:checked')?.value || 0);
+            scores.sleep += parseInt(document.querySelector('input[name="sleep_quality"]:checked')?.value || 0);
+            scores.sleep += parseInt(document.querySelector('input[name="sleep_wake"]:checked')?.value || 0);
+            scores.sleep += parseInt(document.querySelector('input[name="sleep_noon"]:checked')?.value || 0);
+
+            // 情（20分）
+            scores.mood += parseInt(document.getElementById('mood_stable').value);
+            scores.mood += parseInt(document.getElementById('mood_energy').value);
+            scores.mood += parseInt(document.getElementById('mood_digest').value);
+
+            // 加减分
+            let bonus = 0;
+            if (document.getElementById('bonus_morning').checked) bonus += 2;
+            if (document.getElementById('bonus_night').checked) bonus += 2;
+            if (document.getElementById('penalty_food').checked) bonus -= 2;
+            if (document.getElementById('penalty_caffeine').checked) bonus -= 1;
+
+            let total = scores.eat + scores.drink + scores.poop + scores.pee + scores.sleep + scores.mood + bonus;
+            total = Math.max(0, Math.min(100, total)); // 限制在0-100
+
+            // 更新显示
+            document.getElementById('totalScore').textContent = total;
+            document.getElementById('eatScore').textContent = scores.eat;
+            document.getElementById('drinkScore').textContent = scores.drink;
+            document.getElementById('poopScore').textContent = scores.poop;
+            document.getElementById('peeScore').textContent = scores.pee;
+            document.getElementById('sleepScore').textContent = scores.sleep;
+            document.getElementById('moodScore').textContent = scores.mood;
+
+            // 更新评级
+            let badge = '';
+            if (total >= 80) {
+                badge = '<span class="badge badge-excellent">优秀 🌟</span>';
+            } else if (total >= 60) {
+                badge = '<span class="badge badge-good">较稳 ✓</span>';
+            } else if (total >= 50) {
+                badge = '<span class="badge badge-fair">一般 ⚠️</span>';
+            } else {
+                badge = '<span class="badge badge-poor">需调频 ⚡</span>';
+            }
+            document.getElementById('scoreBadge').innerHTML = badge;
+
+            saveData();
+        }
+
+        // 获取所有数据
+        function collectAllData() {
+            const data = {
+                date: document.getElementById('recordDate').value,
+                scores: {
+                    eat: parseInt(document.getElementById('eatScore').textContent),
+                    drink: parseInt(document.getElementById('drinkScore').textContent),
+                    poop: parseInt(document.getElementById('poopScore').textContent),
+                    pee: parseInt(document.getElementById('peeScore').textContent),
+                    sleep: parseInt(document.getElementById('sleepScore').textContent),
+                    mood: parseInt(document.getElementById('moodScore').textContent),
+                    total: parseInt(document.getElementById('totalScore').textContent)
+                },
+                selections: {},
+                notes: {
+                    action: document.getElementById('note_action').value,
+                    tomorrow: document.getElementById('note_tomorrow').value
+                }
+            };
+
+            // 收集所有选择
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+                data.selections[radio.name] = radio.value;
+            });
+
+            // 收集复选框
+            data.selections.eat_bonus = document.getElementById('eat_bonus').checked;
+            data.selections.bonus_morning = document.getElementById('bonus_morning').checked;
+            data.selections.bonus_night = document.getElementById('bonus_night').checked;
+            data.selections.penalty_food = document.getElementById('penalty_food').checked;
+            data.selections.penalty_caffeine = document.getElementById('penalty_caffeine').checked;
+
+            // 收集滑块
+            data.selections.mood_stable = document.getElementById('mood_stable').value;
+            data.selections.mood_energy = document.getElementById('mood_energy').value;
+            data.selections.mood_digest = document.getElementById('mood_digest').value;
+
+            return data;
+        }
+
+        // 保存数据（自动保存到浏览器本地）
+        function saveData() {
+            try {
+                const data = collectAllData();
+                localStorage.setItem('rhythmHealthData', JSON.stringify(data));
+                console.log('✅ 数据已自动保存');
+            } catch (err) {
+                console.error('自动保存失败：', err);
+            }
+        }
+
+        // 加载数据（从浏览器本地恢复）
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('rhythmHealthData');
+                if (!saved) return;
+
+                const data = JSON.parse(saved);
+                
+                // 恢复日期
+                if (data.date) {
+                    document.getElementById('recordDate').value = data.date;
+                }
+                
+                // 恢复选择
+                if (data.selections) {
+                    Object.keys(data.selections).forEach(key => {
+                        if (key.includes('_bonus') || key.includes('bonus_') || key.includes('penalty_')) {
+                            const elem = document.getElementById(key);
+                            if (elem) elem.checked = data.selections[key];
+                        } else if (key.startsWith('mood_')) {
+                            const elem = document.getElementById(key);
+                            if (elem) {
+                                elem.value = data.selections[key];
+                                updateMoodSlider(key, data.selections[key]);
+                            }
+                        } else {
+                            const radio = document.querySelector(`input[name="${key}"][value="${data.selections[key]}"]`);
+                            if (radio) {
+                                radio.checked = true;
+                                radio.closest('.radio-label').classList.add('selected');
+                            }
+                        }
+                    });
+                }
+                
+                // 恢复笔记
+                if (data.notes) {
+                    if (data.notes.action) document.getElementById('note_action').value = data.notes.action;
+                    if (data.notes.tomorrow) document.getElementById('note_tomorrow').value = data.notes.tomorrow;
+                }
+                
+                calculateScore();
+                console.log('✅ 已恢复上次保存的数据');
+            } catch (err) {
+                console.error('数据恢复失败：', err);
+            }
+        }
+
+        // 导出数据
+        function exportData() {
+            try {
+                const data = collectAllData();
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `节律健康指数_${data.date}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                alert('✅ 数据导出成功！');
+            } catch (err) {
+                alert('❌ 导出失败：' + err.message);
+            }
+        }
+
+        // 导入数据
+        function importData() {
+            const input = document.getElementById('fileInput');
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        // 恢复日期
+                        if (data.date) document.getElementById('recordDate').value = data.date;
+                        
+                        // 恢复选择
+                        if (data.selections) {
+                            Object.keys(data.selections).forEach(key => {
+                                if (key.includes('_bonus') || key.includes('bonus_') || key.includes('penalty_')) {
+                                    const elem = document.getElementById(key);
+                                    if (elem) elem.checked = data.selections[key];
+                                } else if (key.startsWith('mood_')) {
+                                    const elem = document.getElementById(key);
+                                    if (elem) {
+                                        elem.value = data.selections[key];
+                                        updateMoodSlider(key, data.selections[key]);
+                                    }
+                                } else {
+                                    const radio = document.querySelector(`input[name="${key}"][value="${data.selections[key]}"]`);
+                                    if (radio) {
+                                        radio.checked = true;
+                                        radio.closest('.radio-label').classList.add('selected');
+                                    }
+                                }
+                            });
+                        }
+                        
+                        // 恢复笔记
+                        if (data.notes) {
+                            if (data.notes.action) document.getElementById('note_action').value = data.notes.action;
+                            if (data.notes.tomorrow) document.getElementById('note_tomorrow').value = data.notes.tomorrow;
+                        }
+                        
+                        calculateScore();
+                        alert('✅ 数据导入成功！');
+                    } catch (err) {
+                        alert('❌ 导入失败：文件格式错误');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // 重置数据
+        function resetData() {
+            if (confirm('⚠️ 确定要重置所有数据吗？此操作不可恢复。')) {
+                document.querySelectorAll('input[type="radio"]').forEach(r => {
+                    r.checked = false;
+                    r.closest('.radio-label').classList.remove('selected');
+                });
+                document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+                document.getElementById('mood_stable').value = 5;
+                document.getElementById('mood_energy').value = 2;
+                document.getElementById('mood_digest').value = 2;
+                updateMoodSlider('mood_stable', 5);
+                updateMoodSlider('mood_energy', 2);
+                updateMoodSlider('mood_digest', 2);
+                document.getElementById('note_action').value = '';
+                document.getElementById('note_tomorrow').value = '';
+                document.getElementById('recordDate').valueAsDate = new Date();
+                
+                // 清除自动保存的数据
+                localStorage.removeItem('rhythmHealthData');
+                
+                calculateScore();
+                alert('✅ 数据已重置');
+            }
+        }
+
+        // 页面加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData(); // 先加载保存的数据
+            calculateScore(); // 然后计算分数
+            console.log('✅ 节律健康指数评分表已加载');
+        });
+    </script>
+</body>
+</html>
